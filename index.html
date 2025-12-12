@@ -1,0 +1,622 @@
+
+	      <!DOCTYPE html>
+<html>
+  <head>
+    <title>CodeSandbox</title>
+
+    <script type="importmap">
+      {"imports":{"react":"https://esm.sh/react@18.3.1","recharts":"https://esm.sh/recharts?external=react,react-dom","lucide-react":"https://esm.sh/lucide-react?external=react,react-dom","https:":"https://esm.sh/https:?external=react,react-dom","react-dom":"https://esm.sh/react-dom@18.3.1","react/jsx-runtime":"https://esm.sh/react@18.3.1/jsx-runtime","react-dom/client":"https://esm.sh/react-dom@18.3.1/client","tailwindcss/defaultTheme":"https://esm.sh/tailwindcss/defaultTheme","tailwindcss-animate":"https://esm.sh/tailwindcss-animate"}}
+    </script>
+
+    <script>
+      window.addEventListener("error", function (event) {
+        const errorObj = {
+          message: event.message,
+          source: event.filename,
+          lineno: event.lineno,
+          colno: event.colno,
+          stack: event.error ? event.error.stack : null
+        };
+        window.parent.postMessage(
+          { action: "error", error: JSON.stringify(errorObj) },
+          "*"
+        );
+        event.preventDefault();
+      });
+
+  function handleImportError(error) {
+    throw new Error('Import module failed: ' + error.target.src);
+  }
+
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      mutation.addedNodes.forEach(node => {
+        if (node.tagName === 'SCRIPT' && node.type === 'module') {
+          node.onerror = handleImportError;
+        }
+      });
+    });
+  });
+
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+
+  document.querySelectorAll('script[type="module"]').forEach(script => {
+    script.onerror = handleImportError;
+  });
+
+  
+window.console = new Proxy(console, {
+  get(target, prop) {
+    if (['log', 'warn', 'error'].includes(prop)) {
+      return new Proxy(target[prop], {
+        apply(fn, thisArg, args) {
+          fn.apply(thisArg, args);
+          window.parent.postMessage({ action: 'console', 
+            type: prop, 
+            args: args.map((arg) => {
+              try {
+                return JSON.stringify(arg).replace(/^["']|["']$/g, '');
+              } catch (e) {
+                return arg;
+              }
+            }) 
+          }, '*');
+        }
+      });
+    }
+    return target[prop];
+  }
+});
+
+
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
+    <style type="text/tailwindcss">
+      @layer base {
+        :root {
+          --background: 0 0% 100%;
+          --foreground: 222.2 47.4% 11.2%;
+
+          --muted: 210 40% 96.1%;
+          --muted-foreground: 215.4 16.3% 46.9%;
+
+          --popover: 0 0% 100%;
+          --popover-foreground: 222.2 47.4% 11.2%;
+
+          --border: 214.3 31.8% 91.4%;
+          --input: 214.3 31.8% 91.4%;
+
+          --card: 0 0% 100%;
+          --card-foreground: 222.2 47.4% 11.2%;
+
+          --primary: 222.2 47.4% 11.2%;
+          --primary-foreground: 210 40% 98%;
+
+          --secondary: 210 40% 96.1%;
+          --secondary-foreground: 222.2 47.4% 11.2%;
+
+          --accent: 210 40% 96.1%;
+          --accent-foreground: 222.2 47.4% 11.2%;
+
+          --destructive: 0 100% 50%;
+          --destructive-foreground: 210 40% 98%;
+
+          --ring: 215 20.2% 65.1%;
+
+          --radius: 0.5rem;
+        }
+
+        .dark {
+          --background: 224 71% 4%;
+          --foreground: 213 31% 91%;
+
+          --muted: 223 47% 11%;
+          --muted-foreground: 215.4 16.3% 56.9%;
+
+          --accent: 216 34% 17%;
+          --accent-foreground: 210 40% 98%;
+
+          --popover: 224 71% 4%;
+          --popover-foreground: 215 20.2% 65.1%;
+
+          --border: 216 34% 17%;
+          --input: 216 34% 17%;
+
+          --card: 224 71% 4%;
+          --card-foreground: 213 31% 91%;
+
+          --primary: 210 40% 98%;
+          --primary-foreground: 222.2 47.4% 1.2%;
+
+          --secondary: 222.2 47.4% 11.2%;
+          --secondary-foreground: 210 40% 98%;
+
+          --destructive: 0 63% 31%;
+          --destructive-foreground: 210 40% 98%;
+
+          --ring: 216 34% 17%;
+
+          --radius: 0.5rem;
+        }
+      }
+    </style>
+    <script type="module">
+          import defaultTheme from "tailwindcss/defaultTheme"
+          import tailwindcssAnimate from "tailwindcss-animate"
+
+          const fontFamily = defaultTheme.fontFamily;
+
+          tailwind.config = {
+            darkMode: ["class"],
+        content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
+        theme: {
+          container: {
+            center: true,
+            padding: "2rem",
+            screens: {
+              "2xl": "1400px",
+            },
+          },
+          extend: {
+            colors: {
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "hsl(var(--primary))",
+                foreground: "hsl(var(--primary-foreground))",
+              },
+              secondary: {
+                DEFAULT: "hsl(var(--secondary))",
+                foreground: "hsl(var(--secondary-foreground))",
+              },
+              destructive: {
+                DEFAULT: "hsl(var(--destructive))",
+                foreground: "hsl(var(--destructive-foreground))",
+              },
+              muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))",
+              },
+              accent: {
+                DEFAULT: "hsl(var(--accent))",
+                foreground: "hsl(var(--accent-foreground))",
+              },
+              popover: {
+                DEFAULT: "hsl(var(--popover))",
+                foreground: "hsl(var(--popover-foreground))",
+              },
+              card: {
+                DEFAULT: "hsl(var(--card))",
+                foreground: "hsl(var(--card-foreground))",
+              },
+            },
+            borderRadius: {
+              lg: `var(--radius)`,
+              md: `calc(var(--radius) - 2px)`,
+              sm: "calc(var(--radius) - 4px)",
+            },
+            fontFamily: {
+              sans: [...fontFamily.sans],
+            },
+
+            keyframes: {
+              "accordion-down": {
+                from: { height: "0" },
+                to: { height: "var(--radix-accordion-content-height)" },
+              },
+              "accordion-up": {
+                from: { height: "var(--radix-accordion-content-height)" },
+                to: { height: "0" },
+              },
+            },
+            animation: {
+              "accordion-down": "accordion-down 0.2s ease-out",
+              "accordion-up": "accordion-up 0.2s ease-out",
+            },
+          },
+        },
+        plugins: [tailwindcssAnimate]
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.27.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" data-type="module">
+      		  import {createRoot} from "react-dom/client";
+            
+      		  
+import React, { useState, useEffect } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, BarChart, Bar } from 'recharts';
+import { AlertTriangle, Activity, Target, TrendingUp, DollarSign } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from "https://esm.sh/shadcdn?external=react,react-dom";
+import { Alert, AlertDescription, AlertTitle } from "https://esm.sh/shadcdn?external=react,react-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "https://esm.sh/shadcdn?external=react,react-dom";
+
+const SimulationDashboardV2 = () => {
+  // --- State Configuration ---
+  const [params, setParams] = useState({
+    capital: 100000,
+    trades: 300,
+    riskPerTrade: 2.0,      
+    winRate: 40.0,          
+    rRatio: 3.0,            
+    stopLoss: 1.0,          
+    feeRate: 0.05,          
+    slippage: 0.02,         
+    ruinThreshold: 50       
+  });
+
+  const [simResults, setSimResults] = useState(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+
+  // --- Handlers ---
+  const handleParamChange = (key, value) => {
+    setParams(prev => ({ ...prev, [key]: parseFloat(value) }));
+  };
+
+  // --- Core Simulation Engine ---
+  const runSimulation = () => {
+    setIsCalculating(true);
+    
+    setTimeout(() => {
+      const { capital, trades, riskPerTrade, winRate, rRatio, stopLoss, feeRate, slippage, ruinThreshold } = params;
+      
+      const f = riskPerTrade / 100;
+      const p = winRate / 100;
+      const delta = stopLoss / 100;
+      const rho = (feeRate + slippage) / 100;
+      const numSims = 3000; // Increased sample size for better median accuracy
+
+      // --- 1. Multipliers ---
+      const winMult = 1 + f * (rRatio * (1 - rho) - (2 * rho / delta));
+      const lossMult = 1 - f * (1 + (2 * rho / delta) - rho);
+
+      if (winMult <= 1) {
+        setSimResults({ error: "交易成本过高，导致盈利交易实际亏损 (Multiplier <= 1)。" });
+        setIsCalculating(false);
+        return;
+      }
+
+      // --- 2. Theoretical Curve (Geometric Expectation) ---
+      const growthFactor = Math.pow(winMult, p) * Math.pow(lossMult, 1 - p);
+      const theoreticalCurve = [];
+      for (let i = 0; i <= trades; i += Math.max(1, Math.floor(trades / 50))) {
+        theoreticalCurve.push({
+          trade: i,
+          equity: capital * Math.pow(growthFactor, i)
+        });
+      }
+      const theoreticalFinal = capital * Math.pow(growthFactor, trades);
+
+      // --- 3. Monte Carlo Simulation ---
+      // We need to store all final equities to find the median
+      // And store full paths for a subset to visualize
+      const allFinalEquities = [];
+      const maxDrawdowns = [];
+      let allPaths = []; // Temporary storage for visualization selection
+
+      for (let s = 0; s < numSims; s++) {
+        let currentEquity = capital;
+        let peakEquity = capital;
+        let maxDD = 0;
+        
+        // We only record full path data for the first 50 sims + we will identify the median path later
+        const shouldRecord = s < 50; 
+        let pathData = shouldRecord ? [{ trade: 0, equity: capital }] : null;
+
+        for (let t = 1; t <= trades; t++) {
+          const isWin = Math.random() < p;
+          currentEquity *= isWin ? winMult : lossMult;
+          
+          if (currentEquity > peakEquity) peakEquity = currentEquity;
+          const dd = (peakEquity - currentEquity) / peakEquity;
+          if (dd > maxDD) maxDD = dd;
+          
+          if (shouldRecord && t % Math.max(1, Math.floor(trades/50)) === 0) {
+            pathData.push({ trade: t, equity: currentEquity });
+          }
+        }
+        
+        allFinalEquities.push({ index: s, final: currentEquity });
+        maxDrawdowns.push(maxDD);
+        if (shouldRecord) allPaths.push(pathData);
+      }
+
+      // --- 4. Identify "Most Fitting" (Median) Outcome ---
+      // Sort by final equity
+      allFinalEquities.sort((a, b) => a.final - b.final);
+      
+      const medianIndexRaw = Math.floor(numSims / 2);
+      const medianOutcome = allFinalEquities[medianIndexRaw].final;
+      
+      // Find a path that is close to the median to display as "Representative Path"
+      // Since we didn't save all paths (memory), we simulate one "Median-like" path artificially 
+      // or just pick the closest from the 50 we saved (approximation)
+      // Better approach: Re-simulate one path that ends exactly near median? 
+      // For performance, let's pick the closest from the 50 we saved to keep it "real".
+      allPaths.sort((pathA, pathB) => {
+         const endA = pathA[pathA.length-1].equity;
+         const endB = pathB[pathB.length-1].equity;
+         return Math.abs(endA - medianOutcome) - Math.abs(endB - medianOutcome);
+      });
+      const representativePath = allPaths[0]; // The path from our sample closest to the true median
+
+      // --- 5. Statistics ---
+      const maxDrawdownsSorted = [...maxDrawdowns].sort((a, b) => a - b);
+      const ruinCount = maxDrawdowns.filter(dd => dd >= ruinThreshold / 100).length;
+      const var95 = maxDrawdownsSorted[Math.floor(numSims * 0.95)];
+
+      // Histogram
+      const histBuckets = 20;
+      const histData = [];
+      const maxValDD = Math.max(...maxDrawdowns);
+      const step = maxValDD / histBuckets;
+      for(let i=0; i<histBuckets; i++) {
+        const lower = i * step;
+        const upper = (i+1) * step;
+        const count = maxDrawdowns.filter(d => d >= lower && d < upper).length;
+        histData.push({
+            range: `${(lower*100).toFixed(0)}%`, // Simplified label
+            count: count,
+            lower: lower
+        });
+      }
+
+      setSimResults({
+        theoreticalCurve,
+        visualizationPaths: allPaths.slice(1, 21), // Show 20 random paths (excluding the median one we picked)
+        representativePath, // The "Median" path
+        stats: {
+          medianFinal: medianOutcome,
+          theoreticalFinal: theoreticalFinal,
+          ruinProb: (ruinCount / numSims) * 100,
+          var95: var95 * 100,
+          netWinPct: (winMult - 1) * 100,
+          netLossPct: (1 - lossMult) * 100,
+          profitRatio: (medianOutcome - capital) / capital
+        },
+        histData
+      });
+      
+      setIsCalculating(false);
+    }, 100);
+  };
+
+  useEffect(() => {
+    runSimulation();
+  }, []);
+
+  // --- Render Helpers ---
+  const formatCurrency = (val) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
+  const formatPct = (val) => `${val.toFixed(2)}%`;
+
+  return (
+    <div className="w-full max-w-6xl mx-auto p-4 space-y-6 bg-slate-50 min-h-screen">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-800">资金曲线拟合与中位数预测</h1>
+          <p className="text-sm text-slate-500">非对称成本模型 (Fixed Fraction w/ Asymmetric Costs)</p>
+        </div>
+        <button 
+          onClick={runSimulation}
+          disabled={isCalculating}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors shadow-sm disabled:opacity-50"
+        >
+          {isCalculating ? '运算中...' : '开始模拟'}
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* --- Sidebar --- */}
+        <Card className="lg:col-span-1 h-fit shadow-sm border-slate-200">
+          <CardHeader className="pb-3 border-b bg-slate-100/50">
+            <CardTitle className="text-base font-semibold text-slate-700">参数设定</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 pt-4 text-sm">
+             <InputGroup label="初始本金" value={params.capital} onChange={v => handleParamChange('capital', v)} prefix="$" />
+             <InputGroup label="交易次数" value={params.trades} onChange={v => handleParamChange('trades', v)} />
+             
+             <div className="pt-2 border-t">
+               <label className="text-xs font-bold text-slate-500 uppercase">策略逻辑</label>
+               <div className="grid grid-cols-2 gap-2 mt-2">
+                 <InputGroup label="风险 %" value={params.riskPerTrade} onChange={v => handleParamChange('riskPerTrade', v)} suffix="%" />
+                 <InputGroup label="胜率 %" value={params.winRate} onChange={v => handleParamChange('winRate', v)} suffix="%" />
+               </div>
+               <InputGroup label="盈亏比 R" value={params.rRatio} onChange={v => handleParamChange('rRatio', v)} className="mt-2" />
+             </div>
+
+             <div className="pt-2 border-t">
+               <label className="text-xs font-bold text-red-500 uppercase">交易摩擦 (高敏)</label>
+               <InputGroup label="止损幅度" value={params.stopLoss} onChange={v => handleParamChange('stopLoss', v)} suffix="%" className="mt-2" />
+               <div className="grid grid-cols-2 gap-2 mt-2">
+                 <InputGroup label="手续费" value={params.feeRate} onChange={v => handleParamChange('feeRate', v)} suffix="%" />
+                 <InputGroup label="滑点" value={params.slippage} onChange={v => handleParamChange('slippage', v)} suffix="%" />
+               </div>
+             </div>
+          </CardContent>
+        </Card>
+
+        {/* --- Main Content --- */}
+        <div className="lg:col-span-3 space-y-6">
+          {simResults?.error && (
+            <Alert variant="destructive"><AlertTriangle className="h-4 w-4" /><AlertTitle>Error</AlertTitle><AlertDescription>{simResults.error}</AlertDescription></Alert>
+          )}
+
+          {simResults && !simResults.error && (
+            <>
+              {/* --- Prediction Cards --- */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* 1. Median Outcome (The "Most Likely") */}
+                <Card className="bg-indigo-50 border-indigo-200 shadow-sm relative overflow-hidden">
+                   <div className="absolute top-0 right-0 p-2 opacity-10"><Target size={60} /></div>
+                   <CardContent className="p-5">
+                      <div className="text-sm font-semibold text-indigo-800 uppercase tracking-wider mb-1 flex items-center gap-2">
+                         <Target size={16}/> 最可能期末资金 (中位数)
+                      </div>
+                      <div className="text-3xl font-bold text-indigo-900 mt-1">
+                         {formatCurrency(simResults.stats.medianFinal)}
+                      </div>
+                      <div className={`text-sm mt-2 font-medium ${simResults.stats.profitRatio > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                         {simResults.stats.profitRatio > 0 ? '+' : ''}{(simResults.stats.profitRatio * 100).toFixed(2)}% 总收益
+                      </div>
+                      <div className="text-xs text-indigo-600/80 mt-1">
+                         *代表了 50% 概率分位点，剔除了极好运气的影响。
+                      </div>
+                   </CardContent>
+                </Card>
+
+                {/* 2. Theoretical Outcome */}
+                <Card className="bg-white border-slate-200 shadow-sm">
+                   <CardContent className="p-5">
+                      <div className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">
+                         理论几何期望 (Formula)
+                      </div>
+                      <div className="text-2xl font-bold text-slate-700 mt-1">
+                         {formatCurrency(simResults.stats.theoreticalFinal)}
+                      </div>
+                      <div className="text-xs text-slate-400 mt-2">
+                         基于完美数学模型。通常略高于中位数。
+                      </div>
+                   </CardContent>
+                </Card>
+
+                {/* 3. Risk Metric */}
+                <Card className={`bg-white shadow-sm border-l-4 ${simResults.stats.ruinProb > 5 ? 'border-l-red-500' : 'border-l-emerald-500'}`}>
+                   <CardContent className="p-5">
+                      <div className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-1">
+                         生存概率指标
+                      </div>
+                      <div className="flex justify-between items-end mt-2">
+                         <div>
+                            <div className="text-sm text-slate-400">破产概率</div>
+                            <div className={`text-xl font-bold ${simResults.stats.ruinProb > 1 ? 'text-red-600' : 'text-emerald-600'}`}>
+                               {formatPct(simResults.stats.ruinProb)}
+                            </div>
+                         </div>
+                         <div className="text-right">
+                            <div className="text-sm text-slate-400">95% VaR 回撤</div>
+                            <div className="text-xl font-bold text-slate-700">
+                               {formatPct(simResults.stats.var95)}
+                            </div>
+                         </div>
+                      </div>
+                   </CardContent>
+                </Card>
+              </div>
+
+              {/* --- Charts --- */}
+              <Tabs defaultValue="chart" className="w-full">
+                <TabsList>
+                  <TabsTrigger value="chart">拟合曲线 (Fitting Curve)</TabsTrigger>
+                  <TabsTrigger value="dist">风险直方图</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="chart">
+                  <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="h-[500px] pt-6">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={simResults.representativePath.map((pt, i) => ({
+                          trade: pt.trade,
+                          medianPath: pt.equity,
+                          theoretical: simResults.theoreticalCurve[i]?.equity,
+                          // Map a few random paths for background noise
+                          ...simResults.visualizationPaths.reduce((acc, path, idx) => ({
+                             ...acc,
+                             [`rnd_${idx}`]: path[i]?.equity
+                          }), {})
+                        }))}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                          <XAxis dataKey="trade" stroke="#94a3b8" tick={{fontSize: 12}} />
+                          <YAxis 
+                            scale="log" 
+                            domain={['auto', 'auto']} 
+                            tickFormatter={(val) => `$${val/1000}k`} 
+                            stroke="#94a3b8"
+                            width={60}
+                          />
+                          <Tooltip 
+                            formatter={(val, name) => [formatCurrency(val), name === 'medianPath' ? '典型路径 (中位数)' : name === 'theoretical' ? '理论期望' : '随机样本']}
+                            contentStyle={{borderRadius: '8px'}}
+                          />
+                          <Legend wrapperStyle={{paddingTop: '20px'}}/>
+                          
+                          {/* Background Random Paths */}
+                          {simResults.visualizationPaths.map((_, idx) => (
+                             <Line key={`rnd_${idx}`} type="monotone" dataKey={`rnd_${idx}`} stroke="#cbd5e1" strokeWidth={1} dot={false} isAnimationActive={false} opacity={0.4} />
+                          ))}
+
+                          {/* Theoretical Curve */}
+                          <Line type="monotone" dataKey="theoretical" stroke="#ef4444" strokeWidth={2} strokeDasharray="5 5" dot={false} name="理论几何期望" />
+                          
+                          {/* The Median Path (Star of the show) */}
+                          <Line type="monotone" dataKey="medianPath" stroke="#4f46e5" strokeWidth={3} dot={false} name="最可能路径 (Median Fit)" />
+
+                          <ReferenceLine y={params.capital} stroke="#94a3b8" strokeDasharray="3 3" label="本金线" />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="dist">
+                   <Card>
+                      <CardContent className="h-[400px] pt-6">
+                         <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={simResults.histData}>
+                               <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                               <XAxis dataKey="range" tick={{fontSize: 10}} />
+                               <YAxis />
+                               <Tooltip />
+                               <Bar dataKey="count" fill="#6366f1" name="出现频次" radius={[4, 4, 0, 0]} />
+                            </BarChart>
+                         </ResponsiveContainer>
+                         <p className="text-center text-sm text-slate-500 mt-2">最大回撤幅度分布 (越靠左越安全)</p>
+                      </CardContent>
+                   </Card>
+                </TabsContent>
+              </Tabs>
+
+              <div className="bg-slate-100 p-4 rounded-lg text-sm text-slate-600 flex flex-col gap-1">
+                 <div className="font-semibold">数据透视：</div>
+                 <div>• 如果您重复执行该策略 100 次，有 50 次的结果会低于 <span className="font-mono font-bold text-indigo-700">{formatCurrency(simResults.stats.medianFinal)}</span>。</div>
+                 <div>• 理论公式显示的 <span className="font-mono text-red-600">{formatCurrency(simResults.stats.theoreticalFinal)}</span> 是数学期望，但在现实中，只有运气较好的前 40% 的人能达到该数值。</div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Simple Components ---
+const InputGroup = ({ label, value, onChange, prefix, suffix, className }) => (
+  <div className={`flex flex-col gap-1 ${className}`}>
+    <label className="text-xs text-slate-500">{label}</label>
+    <div className="relative">
+      {prefix && <span className="absolute left-2 top-1.5 text-slate-400 text-xs">{prefix}</span>}
+      <input 
+        type="number" 
+        value={value} 
+        onChange={(e) => onChange(e.target.value)}
+        className={`w-full border border-slate-200 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none ${prefix ? 'pl-6' : ''} ${suffix ? 'pr-6' : ''}`} 
+      />
+      {suffix && <span className="absolute right-2 top-1.5 text-slate-400 text-xs">{suffix}</span>}
+    </div>
+  </div>
+);
+
+
+      		  createRoot(document.getElementById("root")).render(
+             <>
+      		    <SimulationDashboardV2 />
+              </>
+      		    );
+              window.parent.postMessage({ action: "ready" }, "*");
+    </script>
+  </body>
+</html>
