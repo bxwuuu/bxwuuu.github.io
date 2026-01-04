@@ -1,0 +1,734 @@
+
+	      <!DOCTYPE html>
+<html>
+  <head>
+    <title>CodeSandbox</title>
+
+    <script type="importmap">
+      {"imports":{"react":"https://esm.sh/react@18.3.1","https:":"https://esm.sh/https:?external=react,react-dom","recharts":"https://esm.sh/recharts?external=react,react-dom","lucide-react":"https://esm.sh/lucide-react?external=react,react-dom","react-dom":"https://esm.sh/react-dom@18.3.1","react/jsx-runtime":"https://esm.sh/react@18.3.1/jsx-runtime","react-dom/client":"https://esm.sh/react-dom@18.3.1/client","tailwindcss/defaultTheme":"https://esm.sh/tailwindcss/defaultTheme","tailwindcss-animate":"https://esm.sh/tailwindcss-animate"}}
+    </script>
+
+    <script>
+      window.addEventListener("error", function (event) {
+        const errorObj = {
+          message: event.message,
+          source: event.filename,
+          lineno: event.lineno,
+          colno: event.colno,
+          stack: event.error ? event.error.stack : null
+        };
+        window.parent.postMessage(
+          { action: "error", error: JSON.stringify(errorObj) },
+          "*"
+        );
+        event.preventDefault();
+      });
+
+  function handleImportError(error) {
+    throw new Error('Import module failed: ' + error.target.src);
+  }
+
+  const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+      mutation.addedNodes.forEach(node => {
+        if (node.tagName === 'SCRIPT' && node.type === 'module') {
+          node.onerror = handleImportError;
+        }
+      });
+    });
+  });
+
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+
+  document.querySelectorAll('script[type="module"]').forEach(script => {
+    script.onerror = handleImportError;
+  });
+
+  
+window.console = new Proxy(console, {
+  get(target, prop) {
+    if (['log', 'warn', 'error'].includes(prop)) {
+      return new Proxy(target[prop], {
+        apply(fn, thisArg, args) {
+          fn.apply(thisArg, args);
+          window.parent.postMessage({ action: 'console', 
+            type: prop, 
+            args: args.map((arg) => {
+              try {
+                return JSON.stringify(arg).replace(/^["']|["']$/g, '');
+              } catch (e) {
+                return arg;
+              }
+            }) 
+          }, '*');
+        }
+      });
+    }
+    return target[prop];
+  }
+});
+
+
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
+    <style type="text/tailwindcss">
+      @layer base {
+        :root {
+          --background: 0 0% 100%;
+          --foreground: 222.2 47.4% 11.2%;
+
+          --muted: 210 40% 96.1%;
+          --muted-foreground: 215.4 16.3% 46.9%;
+
+          --popover: 0 0% 100%;
+          --popover-foreground: 222.2 47.4% 11.2%;
+
+          --border: 214.3 31.8% 91.4%;
+          --input: 214.3 31.8% 91.4%;
+
+          --card: 0 0% 100%;
+          --card-foreground: 222.2 47.4% 11.2%;
+
+          --primary: 222.2 47.4% 11.2%;
+          --primary-foreground: 210 40% 98%;
+
+          --secondary: 210 40% 96.1%;
+          --secondary-foreground: 222.2 47.4% 11.2%;
+
+          --accent: 210 40% 96.1%;
+          --accent-foreground: 222.2 47.4% 11.2%;
+
+          --destructive: 0 100% 50%;
+          --destructive-foreground: 210 40% 98%;
+
+          --ring: 215 20.2% 65.1%;
+
+          --radius: 0.5rem;
+        }
+
+        .dark {
+          --background: 224 71% 4%;
+          --foreground: 213 31% 91%;
+
+          --muted: 223 47% 11%;
+          --muted-foreground: 215.4 16.3% 56.9%;
+
+          --accent: 216 34% 17%;
+          --accent-foreground: 210 40% 98%;
+
+          --popover: 224 71% 4%;
+          --popover-foreground: 215 20.2% 65.1%;
+
+          --border: 216 34% 17%;
+          --input: 216 34% 17%;
+
+          --card: 224 71% 4%;
+          --card-foreground: 213 31% 91%;
+
+          --primary: 210 40% 98%;
+          --primary-foreground: 222.2 47.4% 1.2%;
+
+          --secondary: 222.2 47.4% 11.2%;
+          --secondary-foreground: 210 40% 98%;
+
+          --destructive: 0 63% 31%;
+          --destructive-foreground: 210 40% 98%;
+
+          --ring: 216 34% 17%;
+
+          --radius: 0.5rem;
+        }
+      }
+    </style>
+    <script type="module">
+          import defaultTheme from "tailwindcss/defaultTheme"
+          import tailwindcssAnimate from "tailwindcss-animate"
+
+          const fontFamily = defaultTheme.fontFamily;
+
+          tailwind.config = {
+            darkMode: ["class"],
+        content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
+        theme: {
+          container: {
+            center: true,
+            padding: "2rem",
+            screens: {
+              "2xl": "1400px",
+            },
+          },
+          extend: {
+            colors: {
+              border: "hsl(var(--border))",
+              input: "hsl(var(--input))",
+              ring: "hsl(var(--ring))",
+              background: "hsl(var(--background))",
+              foreground: "hsl(var(--foreground))",
+              primary: {
+                DEFAULT: "hsl(var(--primary))",
+                foreground: "hsl(var(--primary-foreground))",
+              },
+              secondary: {
+                DEFAULT: "hsl(var(--secondary))",
+                foreground: "hsl(var(--secondary-foreground))",
+              },
+              destructive: {
+                DEFAULT: "hsl(var(--destructive))",
+                foreground: "hsl(var(--destructive-foreground))",
+              },
+              muted: {
+                DEFAULT: "hsl(var(--muted))",
+                foreground: "hsl(var(--muted-foreground))",
+              },
+              accent: {
+                DEFAULT: "hsl(var(--accent))",
+                foreground: "hsl(var(--accent-foreground))",
+              },
+              popover: {
+                DEFAULT: "hsl(var(--popover))",
+                foreground: "hsl(var(--popover-foreground))",
+              },
+              card: {
+                DEFAULT: "hsl(var(--card))",
+                foreground: "hsl(var(--card-foreground))",
+              },
+            },
+            borderRadius: {
+              lg: `var(--radius)`,
+              md: `calc(var(--radius) - 2px)`,
+              sm: "calc(var(--radius) - 4px)",
+            },
+            fontFamily: {
+              sans: [...fontFamily.sans],
+            },
+
+            keyframes: {
+              "accordion-down": {
+                from: { height: "0" },
+                to: { height: "var(--radix-accordion-content-height)" },
+              },
+              "accordion-up": {
+                from: { height: "var(--radix-accordion-content-height)" },
+                to: { height: "0" },
+              },
+            },
+            animation: {
+              "accordion-down": "accordion-down 0.2s ease-out",
+              "accordion-up": "accordion-up 0.2s ease-out",
+            },
+          },
+        },
+        plugins: [tailwindcssAnimate]
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.27.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" data-type="module">
+      		  import {createRoot} from "react-dom/client";
+            
+      		  
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'https://esm.sh/shadcdn?external=react,react-dom';
+import { Button } from 'https://esm.sh/shadcdn?external=react,react-dom';
+import { Input } from 'https://esm.sh/shadcdn?external=react,react-dom';
+import { Label } from 'https://esm.sh/shadcdn?external=react,react-dom';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import { AlertCircle, TrendingUp, TrendingDown } from 'lucide-react';
+
+function TradingRiskCalculator() {
+  const [params, setParams] = useState({
+    C0: '',
+    f: '',
+    p: '',
+    R: '',
+    m: '',
+    n: '',
+    N: ''
+  });
+
+  const [results, setResults] = useState(null);
+  const [isCalculating, setIsCalculating] = useState(false);
+
+  const handleInputChange = (key, value) => {
+    setParams(prev => ({ ...prev, [key]: value }));
+  };
+
+  const runMonteCarloSimulation = () => {
+    // 验证所有参数是否已填写
+    const requiredParams = ['C0', 'f', 'p', 'R', 'm', 'n', 'N'];
+    const missingParams = requiredParams.filter(key => !params[key] || params[key] === '');
+    
+    if (missingParams.length > 0) {
+      alert('请填写所有参数');
+      return;
+    }
+
+    setIsCalculating(true);
+    
+    setTimeout(() => {
+      const C0 = parseFloat(params.C0);
+      const f = parseFloat(params.f);
+      const p = parseFloat(params.p);
+      const R = parseFloat(params.R);
+      const m = parseFloat(params.m);
+      const n = parseFloat(params.n);
+      const N = parseInt(params.N);
+      const simulations = 10000;
+      
+      // 存储所有模拟路径
+      const allPaths = [];
+      const finalCapitals = [];
+      const maxDrawdowns = [];
+      
+      // 运行蒙特卡洛模拟
+      for (let sim = 0; sim < simulations; sim++) {
+        let capital = C0;
+        const path = [{ trade: 0, capital: C0 }];
+        let peak = C0;
+        let maxDrawdown = 0;
+        
+        for (let trade = 1; trade <= N; trade++) {
+          // 判断挂单是否成交
+          const orderFilled = Math.random() < n;
+          
+          // 判断交易是否盈利
+          const isWin = Math.random() < p;
+          
+          let profit;
+          if (orderFilled) {
+            // 挂单成交，总风险为f
+            profit = isWin ? f * R : -f;
+          } else {
+            // 挂单未成交，仅市价单，风险为mf
+            profit = isWin ? m * f * R : -m * f;
+          }
+          
+          capital += profit;
+          path.push({ trade, capital });
+          
+          // 计算回撤
+          if (capital > peak) {
+            peak = capital;
+          }
+          const drawdown = (peak - capital) / peak;
+          if (drawdown > maxDrawdown) {
+            maxDrawdown = drawdown;
+          }
+        }
+        
+        allPaths.push(path);
+        finalCapitals.push(capital);
+        maxDrawdowns.push(maxDrawdown);
+      }
+      
+      // 排序用于计算分位数
+      const sortedCapitals = [...finalCapitals].sort((a, b) => a - b);
+      const sortedDrawdowns = [...maxDrawdowns].sort((a, b) => b - a);
+      
+      // 计算统计指标
+      const bankruptcyCount = finalCapitals.filter(c => c <= 0.2 * C0).length;
+      const bankruptcyProb = bankruptcyCount / simulations;
+      
+      // 95%最大回撤（第95百分位）
+      const maxDrawdown95 = sortedDrawdowns[Math.floor(simulations * 0.05)];
+      
+      // 极端回撤（最差5%的平均回撤）
+      const extremeDrawdownIndex = Math.floor(simulations * 0.05);
+      const worst5percentDrawdowns = sortedDrawdowns.slice(0, extremeDrawdownIndex + 1);
+      const avgExtremeDrawdown = worst5percentDrawdowns.reduce((a, b) => a + b, 0) / worst5percentDrawdowns.length;
+      
+      // 中位数
+      const medianCapital = sortedCapitals[Math.floor(simulations / 2)];
+      
+      // 平均期末资金
+      const avgCapital = finalCapitals.reduce((a, b) => a + b, 0) / simulations;
+      
+      // 构建收益曲线数据（显示多个百分位数路径）
+      const percentiles = [5, 25, 50, 75, 95];
+      const curveData = [];
+      
+      for (let trade = 0; trade <= N; trade++) {
+        const tradeCapitals = allPaths.map(path => path[trade].capital).sort((a, b) => a - b);
+        const dataPoint = { trade };
+        
+        percentiles.forEach(p => {
+          const index = Math.floor(simulations * p / 100);
+          dataPoint[`p${p}`] = tradeCapitals[index];
+        });
+        
+        curveData.push(dataPoint);
+      }
+      
+      // 计算有效风险系数
+      const alpha = m + n * (1 - m);
+      
+      // 理论期望
+      const expectedReturn = N * f * alpha * (p * (R + 1) - 1);
+      
+      setResults({
+        bankruptcyProb: (bankruptcyProb * 100).toFixed(4),
+        medianCapital: medianCapital.toFixed(2),
+        avgCapital: avgCapital.toFixed(2),
+        expectedReturn: expectedReturn.toFixed(2),
+        expectedReturnPercent: ((expectedReturn / C0) * 100).toFixed(2),
+        alpha: alpha.toFixed(4),
+        curveData,
+        maxDrawdownAvg: (maxDrawdowns.reduce((a, b) => a + b, 0) / simulations * 100).toFixed(2),
+        maxDrawdown95: (maxDrawdown95 * 100).toFixed(2),
+        maxDrawdown95Amount: (C0 * maxDrawdown95).toFixed(2),
+        extremeDrawdown: (avgExtremeDrawdown * 100).toFixed(2),
+        extremeDrawdownAmount: (C0 * avgExtremeDrawdown).toFixed(2),
+        C0: C0,
+        f: f,
+        m: m,
+        n: n
+      });
+      
+      setIsCalculating(false);
+    }, 100);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="text-center py-6">
+          <h1 className="text-4xl font-bold text-slate-800 mb-2">交易策略风险计算器</h1>
+          <p className="text-slate-600">基于蒙特卡洛模拟的分批入场策略风险评估（10000次模拟）</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* 参数面板 */}
+          <Card className="lg:col-span-1">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <AlertCircle className="w-5 h-5" />
+                参数设置
+              </CardTitle>
+              <CardDescription>设置交易策略参数</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="C0">初始本金 C₀</Label>
+                <Input
+                  id="C0"
+                  type="number"
+                  placeholder="例如: 100000"
+                  value={params.C0}
+                  onChange={(e) => handleInputChange('C0', e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="f">固定亏损金额 f</Label>
+                <Input
+                  id="f"
+                  type="number"
+                  placeholder="例如: 1000"
+                  value={params.f}
+                  onChange={(e) => handleInputChange('f', e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="p">策略胜率 p (0-1)</Label>
+                <Input
+                  id="p"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="1"
+                  placeholder="例如: 0.6"
+                  value={params.p}
+                  onChange={(e) => handleInputChange('p', e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="R">盈亏比 R</Label>
+                <Input
+                  id="R"
+                  type="number"
+                  step="0.1"
+                  placeholder="例如: 2"
+                  value={params.R}
+                  onChange={(e) => handleInputChange('R', e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="m">初始仓位比例 m (0-1)</Label>
+                <Input
+                  id="m"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="1"
+                  placeholder="例如: 0.5"
+                  value={params.m}
+                  onChange={(e) => handleInputChange('m', e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="n">挂单成交概率 n (0-1)</Label>
+                <Input
+                  id="n"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="1"
+                  placeholder="例如: 0.7"
+                  value={params.n}
+                  onChange={(e) => handleInputChange('n', e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="N">交易次数 N</Label>
+                <Input
+                  id="N"
+                  type="number"
+                  placeholder="例如: 100"
+                  value={params.N}
+                  onChange={(e) => handleInputChange('N', e.target.value)}
+                />
+              </div>
+
+              <Button 
+                onClick={runMonteCarloSimulation} 
+                className="w-full"
+                disabled={isCalculating}
+              >
+                {isCalculating ? '计算中...' : '开始蒙特卡洛模拟'}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* 指标面板 */}
+          <div className="lg:col-span-2 space-y-6">
+            {results && (
+              <>
+                {/* 关键指标卡片 - 3x2布局 */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-slate-600">破产概率</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-red-600">{results.bankruptcyProb}%</div>
+                      <p className="text-xs text-slate-500 mt-1">资金损失≥80%</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-slate-600">95%最大回撤</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-orange-600">{results.maxDrawdown95}%</div>
+                      <p className="text-xs text-slate-500 mt-1">
+                        最大损失 ${results.maxDrawdown95Amount}
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-slate-600">极端回撤 (尾部风险)</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-purple-600">{results.extremeDrawdown}%</div>
+                      <p className="text-xs text-slate-500 mt-1">
+                        最差5%平均 ${results.extremeDrawdownAmount}
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-slate-600">中位数期末资金</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-green-600">${results.medianCapital}</div>
+                      <p className="text-xs text-slate-500 mt-1">收益率: {((results.medianCapital - results.C0) / results.C0 * 100).toFixed(2)}%</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-slate-600">有效风险系数 α</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-blue-600">{results.alpha}</div>
+                      <p className="text-xs text-slate-500 mt-1">
+                        单次平均风险 ${(results.f * parseFloat(results.alpha)).toFixed(2)}
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-slate-600">理论期望收益</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold text-emerald-600">${results.expectedReturn}</div>
+                      <p className="text-xs text-slate-500 mt-1">
+                        期望收益率: {results.expectedReturnPercent}%
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* 收益曲线图 */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <TrendingUp className="w-5 h-5" />
+                      资金曲线分布
+                    </CardTitle>
+                    <CardDescription>显示不同百分位数的资金演变路径</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={400}>
+                      <AreaChart data={results.curveData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="trade" 
+                          label={{ value: '交易次数', position: 'insideBottom', offset: -5 }}
+                        />
+                        <YAxis 
+                          label={{ value: '资金', angle: -90, position: 'insideLeft' }}
+                        />
+                        <Tooltip 
+                          formatter={(value) => `$${value.toFixed(0)}`}
+                          labelFormatter={(label) => `第${label}次交易`}
+                        />
+                        <Legend />
+                        <Area 
+                          type="monotone" 
+                          dataKey="p5" 
+                          stroke="#ef4444" 
+                          fill="#ef4444" 
+                          fillOpacity={0.1}
+                          name="5%分位数"
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="p25" 
+                          stroke="#f97316" 
+                          fill="#f97316" 
+                          fillOpacity={0.1}
+                          name="25%分位数"
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="p50" 
+                          stroke="#3b82f6" 
+                          strokeWidth={3}
+                          dot={false}
+                          name="中位数"
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="p75" 
+                          stroke="#22c55e" 
+                          fill="#22c55e" 
+                          fillOpacity={0.1}
+                          name="75%分位数"
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="p95" 
+                          stroke="#10b981" 
+                          fill="#10b981" 
+                          fillOpacity={0.1}
+                          name="95%分位数"
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* 风险评估 */}
+                <Card className="border-l-4 border-l-blue-500">
+                  <CardHeader>
+                    <CardTitle className="text-lg">风险评估建议</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3 text-sm">
+                    {parseFloat(results.bankruptcyProb) > 1 && (
+                      <div className="flex gap-2 text-red-600">
+                        <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <p>破产概率偏高，建议降低单次风险敞口或提高胜率</p>
+                      </div>
+                    )}
+                    {parseFloat(results.extremeDrawdown) > 30 && (
+                      <div className="flex gap-2 text-red-600">
+                        <TrendingDown className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <p>极端回撤严重（{results.extremeDrawdown}%），在最差5%情况下平均回撤超过30%，风险较大</p>
+                      </div>
+                    )}
+                    {parseFloat(results.maxDrawdown95) > 20 && parseFloat(results.maxDrawdown95) <= 30 && (
+                      <div className="flex gap-2 text-orange-600">
+                        <TrendingDown className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <p>最大回撤较大（{results.maxDrawdown95}%），需要有较强的心理承受能力</p>
+                      </div>
+                    )}
+                    {parseFloat(results.bankruptcyProb) < 0.1 && parseFloat(results.extremeDrawdown) < 20 && parseFloat(results.maxDrawdown95) < 20 && (
+                      <div className="flex gap-2 text-green-600">
+                        <TrendingUp className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <p>风险参数在合理范围内，策略具有可行性</p>
+                      </div>
+                    )}
+                    {parseFloat(results.expectedReturnPercent) > 0 && (
+                      <div className="flex gap-2 text-green-600">
+                        <TrendingUp className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <p>理论期望收益为正（{results.expectedReturnPercent}%），策略具有正期望值</p>
+                      </div>
+                    )}
+                    
+                    <div className="pt-2 border-t border-slate-200">
+                      <p className="text-slate-700 font-medium mb-1">有效风险系数 α = {results.alpha}</p>
+                      <p className="text-slate-600">
+                        分批入场策略的实际风险暴露。计算公式：α = m + n(1-m)，其中 m={results.m}（初始仓位比例），n={results.n}（挂单成交概率）。
+                        α越小表示实际风险越低，当前单次交易平均风险为 ${(results.f * parseFloat(results.alpha)).toFixed(2)}（{((results.f * parseFloat(results.alpha) / results.C0) * 100).toFixed(2)}%）。
+                      </p>
+                    </div>
+                    
+                    <div className="pt-2 border-t border-slate-200">
+                      <p className="text-slate-700 font-medium mb-1">极端回撤 (尾部风险) = {results.extremeDrawdown}%</p>
+                      <p className="text-slate-600">
+                        该指标衡量最差5%情况下的平均最大回撤。与"95%最大回撤"（边界值{results.maxDrawdown95}%）不同，
+                        极端回撤考察的是最糟糕的500次模拟中回撤的平均水平，更能反映极端市场条件下的真实风险暴露。
+                        当前值表示在最倒霉的5%情况下，平均会经历{results.extremeDrawdown}%的回撤（约${results.extremeDrawdownAmount}）。
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            )}
+
+            {!results && (
+              <Card className="h-96 flex items-center justify-center">
+                <CardContent>
+                  <p className="text-slate-500 text-center">请设置参数并点击"开始蒙特卡洛模拟"按钮</p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+      		  createRoot(document.getElementById("root")).render(
+             <>
+      		    <TradingRiskCalculator />
+              </>
+      		    );
+              window.parent.postMessage({ action: "ready" }, "*");
+    </script>
+  </body>
+</html>
